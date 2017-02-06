@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: argoos
+  name: argoos
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argoos
+  template:
+    metadata:
+      labels:
+        app: argoos
+    spec:
+      containers:
+      - image: smilelab/argoos:1.0.0
+        name: argoos
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000

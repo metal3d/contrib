@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: argoos
+  name: argoos
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argoos
+  template:
+    metadata:
+      labels:
+        app: argoos
+    spec:
+      containers:
+      - image: smilelab/argoos:1.0.0
+        name: argoos
+        env:
+          - name: SERVER_KEY
+            value: /ssl/tls.key
+          - name: SERVER_CERT
+            value: /ssl/tls.crt
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: argoos-certificates
+          mountPath: /ssl
+          readOnly: true
+      volumes:
+      - name: argoos-certificates
+        secret:
+          secretName: argoos-certificates
